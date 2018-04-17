@@ -10,6 +10,7 @@ import java.awt.Toolkit;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
@@ -27,6 +28,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JList;
 import javax.swing.JTextPane;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.BoxLayout;
@@ -41,11 +43,16 @@ import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
 import java.awt.Button;
 import java.awt.Scrollbar;
 import net.miginfocom.swing.MigLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.Action;
+import javax.swing.AbstractAction;
 
 public class MenjacnicaGUI extends JFrame {
 
@@ -72,6 +79,7 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem mntmDodajkurs;
 	private JMenuItem mntmObrisikurs;
 	private JMenuItem mntmIzvrsizamenu;
+	private Action action;
 
 	/**
 	 * Launch the application.
@@ -92,10 +100,25 @@ public class MenjacnicaGUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	public void izlaz() {
+		int opcija = 
+				JOptionPane.showConfirmDialog(
+					null, "Da li zelite da izadjete iz programa?",
+					"Izlazak", JOptionPane.YES_NO_CANCEL_OPTION);
+			
+			if (opcija == JOptionPane.YES_OPTION)
+				System.exit(0);
+	}
 	public MenjacnicaGUI() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				izlaz();
+			}
+		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MenjacnicaGUI.class.getResource("/icons/logo.jpg")));
 		setTitle("Menjacnica");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 534, 351);
 		setJMenuBar(getMenuBar_1());
 		contentPane = new JPanel();
@@ -127,6 +150,19 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem getMntmNewMenuItem() {
 		if (mntmNewMenuItem == null) {
 			mntmNewMenuItem = new JMenuItem("Open");
+			mntmNewMenuItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JFileChooser fc = new JFileChooser();
+					
+					int opcija = fc.showOpenDialog(null);
+					
+					if (opcija == JFileChooser.APPROVE_OPTION) {
+						File f = fc.getSelectedFile();
+						
+						editorPane.setText("ucitan fajl"+f.getName()+"ge je apsolutna putanja"+f.getAbsolutePath());
+					}
+				}
+			});
 			mntmNewMenuItem.setIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/com/sun/java/swing/plaf/windows/icons/NewFolder.gif")));
 			mntmNewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		}
@@ -135,6 +171,11 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem getMntmNewMenuItem_1() {
 		if (mntmNewMenuItem_1 == null) {
 			mntmNewMenuItem_1 = new JMenuItem("Exit");
+			mntmNewMenuItem_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					izlaz();
+				}
+			});
 			mntmNewMenuItem_1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_MASK));
 		}
 		return mntmNewMenuItem_1;
@@ -142,6 +183,19 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem getMntmNewMenuItem_2() {
 		if (mntmNewMenuItem_2 == null) {
 			mntmNewMenuItem_2 = new JMenuItem("Save");
+			mntmNewMenuItem_2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JFileChooser fc = new JFileChooser();
+					
+					int opcija = fc.showSaveDialog(null);
+					
+					if (opcija == JFileChooser.APPROVE_OPTION) {
+						File f = fc.getSelectedFile();
+						
+						editorPane.setText("sacuvan fajl"+f.getName()+"gde jeapssoluta putanja"+f.getAbsolutePath());
+					}
+				}
+			});
 			mntmNewMenuItem_2.setIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
 			mntmNewMenuItem_2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		}
@@ -157,6 +211,14 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem getMntmNewMenuItem_3() {
 		if (mntmNewMenuItem_3 == null) {
 			mntmNewMenuItem_3 = new JMenuItem("About");
+			mntmNewMenuItem_3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null,
+							"Autor Nikola Radivojevic",
+							"Podaci o autoru",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+			});
 		}
 		return mntmNewMenuItem_3;
 	}
@@ -266,5 +328,19 @@ public class MenjacnicaGUI extends JFrame {
 			mntmIzvrsizamenu = new JMenuItem("IzvrsiZamenu");
 		}
 		return mntmIzvrsizamenu;
+	}
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private Action getAction() {
+		if (action == null) {
+			action = new SwingAction();
+		}
+		return action;
 	}
 }

@@ -30,23 +30,6 @@ public class DodajKursGUI extends JFrame {
 	private JLabel lblNewLabel_3;
 	private JLabel lblNewLabel_4;
 	private JLabel lblNewLabel_5;
-
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					DodajKursGUI frame = new DodajKursGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-*/
 	/**
 	 * Create the frame.
 	 */
@@ -100,10 +83,10 @@ public class DodajKursGUI extends JFrame {
 					menjacnica.tekst="Dodat kurs "+"sifra:"+textField.getText()+" naziv:"+textField_1.getText()+" prodajni kurs:"+textField_2.getText()+" kupovni kurs:"+
 				textField_3.getText()+" srednji kurs:"+textField_4.getText()+" skraceni naziv:"+textField_5.getText();
 					menjacnica.dodaj();
-				
+					dispose();
 				}
 			});
-			btnNewButton.setBounds(23, 205, 89, 23);
+			btnNewButton.setBounds(23, 205, 97, 23);
 		}
 		return btnNewButton;
 	}
@@ -189,7 +172,7 @@ public class DodajKursGUI extends JFrame {
 	private JLabel getLblNewLabel_5() {
 		if (lblNewLabel_5 == null) {
 			lblNewLabel_5 = new JLabel("skraceni naziv");
-			lblNewLabel_5.setBounds(257, 138, 74, 14);
+			lblNewLabel_5.setBounds(257, 138, 103, 14);
 		}
 		return lblNewLabel_5;
 	}

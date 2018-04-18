@@ -299,6 +299,12 @@ public class MenjacnicaGUI extends JFrame {
 	private JButton getBtnNewButton() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("ObrisiKurs");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ObrisiKursGUI obrisi=new ObrisiKursGUI(menjacnica);
+					obrisi.setVisible(true);
+				}
+			});
 		}
 		return btnNewButton;
 	}
@@ -309,6 +315,7 @@ public class MenjacnicaGUI extends JFrame {
 		return btnNewButton_2;
 	}
 	private JTable getTable() {
+		String[] row=new String[6];
 		if (table == null) {
 			table = new JTable(model);
 			model.addColumn("Sifra");
@@ -317,6 +324,12 @@ public class MenjacnicaGUI extends JFrame {
 			model.addColumn("Srednji");
 			model.addColumn("Kupovni");
 			model.addColumn("Naziv");
+			model.addRow(row);
+			model.addRow(row);
+			model.addRow(row);
+			model.addRow(row);
+			model.addRow(row);
+			model.addRow(row);
 		}
 		return table;
 	}
@@ -346,7 +359,13 @@ public class MenjacnicaGUI extends JFrame {
 	}
 	private JMenuItem getMntmObrisikurs() {
 		if (mntmObrisikurs == null) {
-			mntmObrisikurs = new JMenuItem("ObrisiKurs");
+			mntmObrisikurs = new JMenuItem("ObrisiKurs");	
+			mntmObrisikurs.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ObrisiKursGUI obrisi=new ObrisiKursGUI(menjacnica);
+					obrisi.setVisible(true);
+				}
+			});
 		}
 		return mntmObrisikurs;
 	}
@@ -371,6 +390,10 @@ public class MenjacnicaGUI extends JFrame {
 		return action;
 	}
 	public void dodaj() {
+		if(editorPane.getText().isEmpty()) {
+			editorPane.setText(tekst);
+			return;
+		}
 		editorPane.setText(editorPane.getText()+"\n"+tekst);
 	}
 }

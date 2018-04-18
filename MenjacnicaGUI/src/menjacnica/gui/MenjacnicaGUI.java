@@ -80,6 +80,8 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem mntmObrisikurs;
 	private JMenuItem mntmIzvrsizamenu;
 	private Action action;
+	private MenjacnicaGUI menjacnica;
+	public String tekst;
 
 	/**
 	 * Launch the application.
@@ -128,6 +130,7 @@ public class MenjacnicaGUI extends JFrame {
 		contentPane.add(getScrollPane(), BorderLayout.CENTER);
 		contentPane.add(getPanel(), BorderLayout.EAST);
 		contentPane.add(getPanel_1(), BorderLayout.SOUTH);
+		this.menjacnica=this;
 	}
 
 	private JMenuBar getMenuBar_1() {
@@ -157,9 +160,8 @@ public class MenjacnicaGUI extends JFrame {
 					int opcija = fc.showOpenDialog(null);
 					
 					if (opcija == JFileChooser.APPROVE_OPTION) {
-						File f = fc.getSelectedFile();
-						
-						editorPane.setText("ucitan fajl"+f.getName()+"ge je apsolutna putanja"+f.getAbsolutePath());
+						File f = fc.getSelectedFile(); 
+						editorPane.setText(editorPane.getText()+"\n"+"ucitan fajl"+f.getName()+"ge je apsolutna putanja"+f.getAbsolutePath());
 					}
 				}
 			});
@@ -192,7 +194,7 @@ public class MenjacnicaGUI extends JFrame {
 					if (opcija == JFileChooser.APPROVE_OPTION) {
 						File f = fc.getSelectedFile();
 						
-						editorPane.setText("sacuvan fajl"+f.getName()+"gde jeapssoluta putanja"+f.getAbsolutePath());
+						editorPane.setText(editorPane.getText()+"\n"+"sacuvan fajl"+f.getName()+"gde jeapssoluta putanja"+f.getAbsolutePath());
 					}
 				}
 			});
@@ -255,7 +257,8 @@ public class MenjacnicaGUI extends JFrame {
 			btnNewButton_1 = new JButton("DodajKurs");
 			btnNewButton_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+					DodajKursGUI novi=new DodajKursGUI(menjacnica);
+					novi.setVisible(true);
 				}
 			});
 			buttonGroup.add(btnNewButton_1);
@@ -263,6 +266,22 @@ public class MenjacnicaGUI extends JFrame {
 		return btnNewButton_1;
 	}
 	private static void addPopup(Component component, final JPopupMenu popup) {
+			component.addMouseListener(new MouseAdapter() {
+				public void mousePressed(MouseEvent e) {
+					if (e.isPopupTrigger()) {
+						showMenu(e);
+					}
+				}
+				public void mouseReleased(MouseEvent e) {
+					if (e.isPopupTrigger()) {
+						showMenu(e);
+					}
+				}
+				private void showMenu(MouseEvent e) {
+					popup.show(e.getComponent(), e.getX(), e.getY());
+				}
+			});
+		
 	}
 	private JScrollPane getScrollPane_1() {
 		if (scrollPane_1 == null) {
@@ -305,6 +324,8 @@ public class MenjacnicaGUI extends JFrame {
 	private JPopupMenu getPopupMenu() {
 		if (popupMenu == null) {
 			popupMenu = new JPopupMenu();
+			popupMenu.addMouseListener(new MouseAdapter() {
+			});
 			popupMenu.add(getMntmDodajkurs());
 			popupMenu.add(getMntmObrisikurs());
 			popupMenu.add(getMntmIzvrsizamenu());
@@ -314,6 +335,12 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem getMntmDodajkurs() {
 		if (mntmDodajkurs == null) {
 			mntmDodajkurs = new JMenuItem("DodajKurs");
+			mntmDodajkurs.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					DodajKursGUI novi=new DodajKursGUI(menjacnica);
+					novi.setVisible(true);
+				}
+			});
 		}
 		return mntmDodajkurs;
 	}
@@ -342,5 +369,8 @@ public class MenjacnicaGUI extends JFrame {
 			action = new SwingAction();
 		}
 		return action;
+	}
+	public void dodaj() {
+		editorPane.setText(editorPane.getText()+"\n"+tekst);
 	}
 }
